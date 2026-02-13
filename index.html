@@ -1,59 +1,55 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Office Traffic Controller</title>
+    <title>Gestor de Tráfego de Escritório</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div id="game-container">
-        <!-- Tela Inicial -->
+        <!-- Ecrã Inicial (Imagem de fundo com botão) -->
         <div id="start-screen">
-            <div class="logo">🏢</div>
-            <h1>Office Traffic Controller</h1>
-            <p class="subtitle">Gerencie o fluxo de colaboradores no escritório!</p>
-            
-            <div class="instructions">
-                <h3>📋 Sua Missão</h3>
-                <p>Você é o Controlador de Tráfego do Escritório! <strong>15 colaboradores</strong> precisam trabalhar, mas os espaços são limitados.</p>
-                <p>Arraste cada pessoa para o local adequado à sua tarefa. Se a sala estiver ocupada, coloque na <strong>Sala de Espera</strong>.</p>
-                
-                <div class="rules">
-                    <h4>🎯 Tipos de Tarefas</h4>
-                    <div class="task-list">
-                        <div class="task-item blue">
-                            <span class="task-icon">📧</span>
-                            <div class="task-info">
-                                <strong>E-mail / Chat</strong>
-                                <span>Open Space • 5 segundos</span>
-                            </div>
-                        </div>
-                        <div class="task-item red">
-                            <span class="task-icon">🔐</span>
-                            <div class="task-info">
-                                <strong>Confidencial / Feedback</strong>
-                                <span>Phonebooth • 10 segundos</span>
-                            </div>
-                        </div>
-                        <div class="task-item green">
-                            <span class="task-icon">🤝</span>
-                            <div class="task-info">
-                                <strong>Daily / Alinhamento</strong>
-                                <span>Huddle Room • 20 segundos</span>
-                            </div>
-                        </div>
+            <button id="start-btn">Iniciar</button>
+        </div>
+
+        <!-- Ecrã de Missão (Overlay sobre o fundo do jogo) -->
+        <div id="mission-screen" class="hidden">
+            <div class="mission-content">
+                <h1 class="mission-title">A tua missão...</h1>
+                <p class="mission-description">
+                    És o Controlador de Tráfego do Escritório! 9 colaboradores precisam de trabalhar, mas os espaços são
+                    limitados. Tua Missão: Arrasta cada pessoa para o local adequado à sua tarefa. ⚠️ ATENÇÃO: Cada
+                    tarefa ocupa a sala por um tempo (segundos). Se a sala ideal estiver ocupada, coloque o colega na
+                    SALA DE ESPERA. Não deixe ninguém sem lugar!
+                </p>
+
+                <h2 class="mission-subtitle">Tipos de tarefas</h2>
+
+                <div class="mission-cards">
+                    <div class="mission-card card-blue">
+                        <h3>E-mail / Chat</h3>
+                        <p class="location-text">OPEN SPACE</p>
+                    </div>
+                    <div class="mission-card card-red">
+                        <h3>Confidencial / Feedback</h3>
+                        <p class="location-text">PHONEBOOTH</p>
+                    </div>
+                    <div class="mission-card card-green">
+                        <h3>Daily / Alinhamento</h3>
+                        <p class="location-text">HUDDLE ROOM</p>
                     </div>
                 </div>
 
-                <div class="warnings">
-                    <p>⚠️ <strong>Local errado:</strong> -5 segundos no timer</p>
-                    <p>⏰ <strong>Paciência zero:</strong> Colaborador desiste = Game Over</p>
-                    <p>🏆 <strong>Vitória:</strong> Atenda todos os 15 colaboradores!</p>
+                <div class="mission-button-container">
+                    <button id="continue-btn">Continuar</button>
                 </div>
             </div>
-
-            <button id="start-btn">▶ Iniciar Jogo</button>
         </div>
 
         <!-- Área do Jogo -->
@@ -62,100 +58,75 @@
             <div id="header">
                 <div id="timer-container">
                     <span class="timer-icon">⏱</span>
-                    <span id="timer">02:00</span>
+                    <span id="timer">01:00</span>
                 </div>
                 <div id="phase-indicator">
                     <span id="phase-text">Fase 1: Aquecimento</span>
                 </div>
                 <div id="progress-container">
-                    <span id="progress-text">Colaboradores: <span id="completed">0</span>/15</span>
+                    <span id="progress-text">Colaboradores: <span id="completed">0</span>/9</span>
                     <div id="progress-bar">
                         <div id="progress-fill"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Área Principal -->
+            <!-- Área Principal com Fundo -->
             <div id="office">
-                <!-- Recepção -->
+                <!-- Receção - Área superior -->
                 <div id="reception" class="area">
-                    <div class="area-header">
-                        <span class="area-icon">📥</span>
-                        <span class="area-title">Recepção</span>
-                        <span class="area-count">Aguardando: <span id="reception-count">0</span></span>
+                    <div class="slots-container" id="reception-slots">
+                        <div class="slot-placeholder"></div>
+                        <div class="slot-placeholder"></div>
+                        <div class="slot-placeholder"></div>
+                        <div class="slot-placeholder"></div>
                     </div>
-                    <div class="slots-container" id="reception-slots"></div>
+                    <div class="area-label">Receção</div>
                 </div>
 
-                <!-- Sala de Espera -->
+                <!-- Sala de Espera - Área do meio -->
                 <div id="waiting-room" class="area">
-                    <div class="area-header">
-                        <span class="area-icon">🪑</span>
-                        <span class="area-title">Sala de Espera</span>
-                        <span class="area-count">Pessoas: <span id="waiting-count">0</span></span>
+                    <div class="slots-container" id="waiting-slots">
+                        <div class="slot-placeholder"></div>
+                        <div class="slot-placeholder"></div>
+                        <div class="slot-placeholder"></div>
                     </div>
-                    <div class="slots-container" id="waiting-slots"></div>
-                    <div class="area-hint">Arraste colaboradores aqui enquanto aguardam vaga</div>
+                    <div class="area-label">Sala de Espera</div>
                 </div>
 
-                <!-- Espaços de Trabalho -->
+                <!-- Espaços de Trabalho - Área inferior -->
                 <div id="workspaces">
-                    <!-- Open Space -->
+                    <!-- OPEN SPACE -->
                     <div id="open-space" class="workspace">
-                        <div class="workspace-header">
-                            <span class="workspace-icon">💻</span>
-                            <span class="workspace-title">Open Space</span>
-                        </div>
                         <div class="workspace-slots">
                             <div class="work-slot" data-type="blue" data-slot="open-a">
-                                <span class="slot-label">Mesa A</span>
-                                <div class="slot-timer hidden">
-                                    <div class="slot-timer-bar"></div>
-                                    <span class="slot-timer-text">5s</span>
-                                </div>
+                                <div class="card-timer hidden"></div>
                             </div>
                             <div class="work-slot" data-type="blue" data-slot="open-b">
-                                <span class="slot-label">Mesa B</span>
-                                <div class="slot-timer hidden">
-                                    <div class="slot-timer-bar"></div>
-                                    <span class="slot-timer-text">5s</span>
-                                </div>
+                                <div class="card-timer hidden"></div>
                             </div>
                         </div>
+                        <div class="workspace-label">OPEN SPACE</div>
                     </div>
 
-                    <!-- Phonebooth -->
+                    <!-- PHONEBOOTH -->
                     <div id="phonebooth" class="workspace">
-                        <div class="workspace-header">
-                            <span class="workspace-icon">📞</span>
-                            <span class="workspace-title">Phonebooth</span>
-                        </div>
                         <div class="workspace-slots">
                             <div class="work-slot" data-type="red" data-slot="phone">
-                                <span class="slot-label">Cabine</span>
-                                <div class="slot-timer hidden">
-                                    <div class="slot-timer-bar"></div>
-                                    <span class="slot-timer-text">10s</span>
-                                </div>
+                                <div class="card-timer hidden"></div>
                             </div>
                         </div>
+                        <div class="workspace-label">PHONEBOOTH</div>
                     </div>
 
-                    <!-- Huddle Room -->
+                    <!-- HUDDLE ROOM -->
                     <div id="huddle-room" class="workspace">
-                        <div class="workspace-header">
-                            <span class="workspace-icon">👥</span>
-                            <span class="workspace-title">Huddle Room</span>
-                        </div>
                         <div class="workspace-slots">
                             <div class="work-slot" data-type="green" data-slot="huddle">
-                                <span class="slot-label">Mesa Reunião</span>
-                                <div class="slot-timer hidden">
-                                    <div class="slot-timer-bar"></div>
-                                    <span class="slot-timer-text">20s</span>
-                                </div>
+                                <div class="card-timer hidden"></div>
                             </div>
                         </div>
+                        <div class="workspace-label">HUDDLE ROOM</div>
                     </div>
                 </div>
             </div>
@@ -168,8 +139,11 @@
             <div id="message-icon"></div>
             <h2 id="message-title"></h2>
             <p id="message-text"></p>
+            <div id="message-access-code" class="hidden">Seu código de acesso é: 1235</div>
             <div id="message-stats"></div>
-            <button id="restart-btn">🔄 Jogar Novamente</button>
+            <div class="message-buttons">
+                <button id="restart-btn-overlay" class="game-btn">Recomeçar</button>
+            </div>
         </div>
     </div>
 
@@ -188,4 +162,5 @@
     <script src="js/dragdrop.js"></script>
     <script src="js/game.js"></script>
 </body>
+
 </html>

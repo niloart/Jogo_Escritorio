@@ -3,10 +3,11 @@
  */
 
 class Employee {
-    constructor(id, type, name) {
+    constructor(id, type, name, image) {
         this.id = id;
         this.type = type;  // 'blue', 'red', 'green'
         this.name = name;
+        this.image = image;  // Caminho para a imagem do card
         this.patience = CONFIG.PATIENCE_MAX;
         this.location = 'reception';  // 'reception', 'waiting', 'working'
         this.slotId = null;
@@ -27,8 +28,6 @@ class Employee {
      * Cria o elemento DOM do colaborador
      */
     createElement() {
-        const taskInfo = this.getTaskInfo();
-        
         const el = document.createElement('div');
         el.className = `employee ${this.type}`;
         el.id = `employee-${this.id}`;
@@ -38,9 +37,7 @@ class Employee {
             <div class="patience-container">
                 <div class="patience-bar" style="width: ${this.patience}%"></div>
             </div>
-            <div class="employee-icon">${taskInfo.icon}</div>
-            <div class="employee-name">${this.name}</div>
-            <div class="employee-task">${taskInfo.name}</div>
+            <img src="${this.image}" alt="${this.name}" class="employee-card-image" draggable="false">
         `;
 
         this.element = el;
@@ -177,51 +174,54 @@ class Employee {
 class EmployeeFactory {
     constructor() {
         this.idCounter = 0;
-        this.usedNames = [];
+        this.availableEmployees = [];
+        this.reset();
     }
 
     /**
      * Cria um novo colaborador
-     * @param {string} type - Tipo opcional, se não fornecido será aleatório
+     * @param {string} type - Tipo opcional, se não fornecido será baseado nos disponíveis
      */
     create(type = null) {
-        const employeeType = type || this.getRandomType();
-        const name = this.getNextName();
+        // Filtrar colaboradores disponíveis por tipo se especificado
+        let candidates = type 
+            ? this.availableEmployees.filter(e => e.type === type)
+            : this.availableEmployees;
+        
+        if (candidates.length === 0) {
+            // Se não há candidatos do tipo, pega qualquer um disponível
+            candidates = this.availableEmployees;
+        }
+        
+        if (candidates.length === 0) {
+            // Se não há mais colaboradores, retorna null
+            return null;
+        }
+        
+        // Seleciona aleatoriamente um colaborador
+        const randomIndex = Math.floor(Math.random() * candidates.length);
+        const employeeData = candidates[randomIndex];
+        
+        // Remove o colaborador da lista de disponíveis
+        this.availableEmployees = this.availableEmployees.filter(e => e.name !== employeeData.name);
         
         const employee = new Employee(
             ++this.idCounter,
-            employeeType,
-            name
+            employeeData.type,
+            employeeData.name,
+            employeeData.image
         );
         
         return employee;
     }
 
     /**
-     * Obtém um tipo aleatório
+     * Obtém um tipo aleatório baseado nos colaboradores disponíveis
      */
     getRandomType() {
-        const types = ['blue', 'red', 'green'];
-        return types[Math.floor(Math.random() * types.length)];
-    }
-
-    /**
-     * Obtém o próximo nome da lista
-     */
-    getNextName() {
-        if (this.usedNames.length >= CONFIG.EMPLOYEE_NAMES.length) {
-            // Se todos os nomes foram usados, reinicia
-            this.usedNames = [];
-        }
-        
-        const availableNames = CONFIG.EMPLOYEE_NAMES.filter(
-            name => !this.usedNames.includes(name)
-        );
-        
-        const name = availableNames[Math.floor(Math.random() * availableNames.length)];
-        this.usedNames.push(name);
-        
-        return name;
+        if (this.availableEmployees.length === 0) return 'blue';
+        const randomEmployee = this.availableEmployees[Math.floor(Math.random() * this.availableEmployees.length)];
+        return randomEmployee.type;
     }
 
     /**
@@ -229,6 +229,7 @@ class EmployeeFactory {
      */
     reset() {
         this.idCounter = 0;
-        this.usedNames = [];
+        // Cria uma cópia da lista de colaboradores
+        this.availableEmployees = [...CONFIG.EMPLOYEES];
     }
 }

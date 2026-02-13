@@ -201,6 +201,14 @@ class DragDropManager {
      * Coloca o colaborador na sala de espera
      */
     placeInWaitingRoom() {
+        // Verificar se a sala de espera está cheia (limite de 3 cards)
+        const waitingCount = this.waitingSlots.querySelectorAll('.employee').length;
+        if (waitingCount >= 3) {
+            this.returnToOriginal();
+            this.game.showToast('⚠️ Sala de espera cheia! Máximo 3 pessoas.', 'error');
+            return;
+        }
+        
         this.resetElementPosition(this.draggedElement);
         this.waitingSlots.appendChild(this.draggedElement);
         
@@ -231,9 +239,7 @@ class DragDropManager {
      * Mostra o timer no slot de trabalho
      */
     showSlotTimer(slot, employee) {
-        const timerEl = slot.querySelector('.slot-timer');
-        const timerBar = slot.querySelector('.slot-timer-bar');
-        const timerText = slot.querySelector('.slot-timer-text');
+        const timerEl = slot.querySelector('.card-timer');
         
         if (timerEl) {
             timerEl.classList.remove('hidden');
@@ -241,17 +247,11 @@ class DragDropManager {
             const updateTimer = () => {
                 if (!employee.isWorking) {
                     timerEl.classList.add('hidden');
-                    timerBar.style.setProperty('--progress', '100%');
                     return;
                 }
                 
                 const remaining = employee.getRemainingWorkTime();
-                const taskInfo = employee.getTaskInfo();
-                const totalTime = taskInfo.workTime / 1000;
-                const progress = ((totalTime - remaining) / totalTime) * 100;
-                
-                timerText.textContent = `${remaining}s`;
-                timerBar.style.setProperty('--progress', `${100 - progress}%`);
+                timerEl.textContent = `⏱️ ${remaining}s`;
                 
                 if (remaining > 0) {
                     requestAnimationFrame(updateTimer);
@@ -308,7 +308,7 @@ class DragDropManager {
      * Reseta a posição do elemento
      */
     resetElementPosition(element) {
-        element.style.position = 'relative';
+        element.style.position = '';
         element.style.left = '';
         element.style.top = '';
         element.style.width = '';

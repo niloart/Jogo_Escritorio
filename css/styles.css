@@ -7,23 +7,23 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: #1a1a2e;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
     color: #e2e8f0;
+    overflow: hidden;
 }
 
 /* ==================== CONTAINER ==================== */
 #game-container {
-    background: #2d3748;
-    border-radius: 20px;
-    padding: 25px;
+    width: 1200px;
+    height: 675px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    max-width: 1000px;
-    width: 100%;
 }
 
 .hidden {
@@ -32,156 +32,213 @@ body {
 
 /* ==================== TELA INICIAL ==================== */
 #start-screen {
-    text-align: center;
-    padding: 30px;
-}
-
-#start-screen .logo {
-    font-size: 4rem;
-    margin-bottom: 10px;
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-#start-screen h1 {
-    font-size: 2.5rem;
-    color: #ff6b35;
-    margin-bottom: 10px;
-    text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
-}
-
-#start-screen .subtitle {
-    color: #a0aec0;
-    font-size: 1.1rem;
-    margin-bottom: 25px;
-}
-
-#start-screen .instructions {
-    background: #1a202c;
-    padding: 25px;
-    border-radius: 15px;
-    text-align: left;
-    margin-bottom: 25px;
-}
-
-#start-screen .instructions h3 {
-    color: #ff6b35;
-    margin-bottom: 15px;
-    font-size: 1.3rem;
-}
-
-#start-screen .instructions p {
-    color: #cbd5e0;
-    line-height: 1.6;
-    margin-bottom: 10px;
-}
-
-.rules {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #4a5568;
-}
-
-.rules h4 {
-    color: #ffd93d;
-    margin-bottom: 15px;
-}
-
-.task-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.task-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 12px 15px;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.3);
-}
-
-.task-item.blue {
-    border-left: 4px solid #4299e1;
-}
-
-.task-item.red {
-    border-left: 4px solid #fc8181;
-}
-
-.task-item.green {
-    border-left: 4px solid #68d391;
-}
-
-.task-icon {
-    font-size: 1.5rem;
-}
-
-.task-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.task-info strong {
-    color: #e2e8f0;
-}
-
-.task-info span {
-    color: #a0aec0;
-    font-size: 0.85rem;
-}
-
-.warnings {
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(255, 107, 53, 0.1);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 107, 53, 0.3);
-}
-
-.warnings p {
-    margin-bottom: 8px !important;
-    font-size: 0.95rem;
-}
-
-.warnings p:last-child {
-    margin-bottom: 0 !important;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/screens/inicio.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
 }
 
 #start-btn {
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-    color: white;
+    position: absolute;
+    left: 776px;
+    top: 484px;
+    transform: translate(-50%, -50%);
+    background: url('../assets/buttons/botao_iniciar.png') no-repeat center;
+    background-size: contain;
+    color: transparent;
     border: none;
-    padding: 18px 60px;
-    font-size: 1.3rem;
-    border-radius: 15px;
+    width: 200px;
+    height: 60px;
     cursor: pointer;
+    font-size: 0;
     transition: all 0.3s ease;
+    z-index: 10;
+}
+
+#start-btn:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+    filter: brightness(1.2);
+}
+
+/* ==================== TELA DE MISSÃO ==================== */
+#mission-screen {
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/screens/Fundo_missao_novo.png');
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    animation: fadeIn 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.mission-content {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    gap: 0.8rem;
+    font-family: 'Michroma', sans-serif;
+    margin-left: 0;
+}
+
+.mission-title {
+    font-size: 3rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+    text-shadow: none;
+}
+
+.mission-description {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    max-width: 850px;
+    color: #e2e8f0;
+    text-shadow: none;
+}
+
+.mission-subtitle {
+    font-size: 1.4rem;
+    margin-top: 0.5rem;
+    font-weight: normal;
+}
+
+.mission-cards {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+.mission-card {
+    background: rgba(30, 41, 59, 0.7);
+    border: 2px solid #ef4444;
+    border-radius: 12px;
+    padding: 1rem;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+}
+
+/* Card color themes */
+.card-blue,
+.card-red,
+.card-green {
+    background: rgba(30, 41, 59, 0.7);
+    border-color: #ef4444;
+}
+
+.mission-card h3 {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
     font-weight: bold;
+}
+
+.mission-card .location-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.mission-access-code {
+    margin-top: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffffff;
+    background: rgba(30, 41, 59, 0.8);
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    border: 1px solid #ef4444;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-#start-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+#continue-btn {
+    /* Reset absolute positioning */
+    position: static;
+    transform: none;
+
+    /* Keep button style */
+    background: url('../assets/buttons/botao_continuar.png') no-repeat center;
+    background-size: contain;
+    color: transparent;
+    border: none;
+    width: 250px;
+    height: 80px;
+    cursor: pointer;
+    font-size: 0;
+    transition: all 0.3s ease;
+}
+
+.game-btn {
+    background: #4a5568;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.game-btn:hover {
+    background: #2d3748;
+}
+
+#continue-btn:hover {
+    transform: scale(1.05);
+}
+
+/* ==================== ÁREA DO JOGO ==================== */
+#game-area {
+    width: 100%;
+    height: 100%;
+    background: #2d3748;
+    position: relative;
 }
 
 /* ==================== HEADER DO JOGO ==================== */
 #header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding: 15px 20px;
-    background: #1a202c;
-    border-radius: 12px;
-    gap: 20px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 50;
+    height: 50px;
 }
 
 #timer-container {
@@ -191,11 +248,11 @@ body {
 }
 
 .timer-icon {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
 }
 
 #timer {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: #48bb78;
     font-family: 'Courier New', monospace;
@@ -214,32 +271,39 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
 }
 
 #phase-indicator {
-    background: rgba(255, 107, 53, 0.2);
-    padding: 8px 20px;
-    border-radius: 20px;
+    background: rgba(255, 107, 53, 0.3);
+    padding: 6px 15px;
+    border-radius: 15px;
     border: 1px solid #ff6b35;
 }
 
 #phase-text {
     color: #ff6b35;
     font-weight: bold;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
 }
 
 #progress-container {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 5px;
+    gap: 3px;
 }
 
 #progress-text {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #a0aec0;
 }
 
@@ -249,10 +313,10 @@ body {
 }
 
 #progress-bar {
-    width: 150px;
-    height: 8px;
+    width: 120px;
+    height: 6px;
     background: #4a5568;
-    border-radius: 4px;
+    border-radius: 3px;
     overflow: hidden;
 }
 
@@ -261,171 +325,291 @@ body {
     width: 0%;
     background: linear-gradient(90deg, #48bb78, #68d391);
     transition: width 0.3s ease;
-    border-radius: 4px;
+    border-radius: 3px;
 }
 
 /* ==================== ÁREA DO ESCRITÓRIO ==================== */
 #office {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.area {
-    background: #4a5568;
-    border-radius: 12px;
-    padding: 15px;
+    width: 100%;
+    height: 100%;
     position: relative;
 }
 
-.area-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+/* ==================== ÁREAS COMUNS ==================== */
+.area {
+    position: absolute;
 }
 
-.area-icon {
-    font-size: 1.3rem;
-}
-
-.area-title {
-    font-weight: bold;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    flex: 1;
-}
-
-.area-count {
-    font-size: 0.85rem;
-    color: #a0aec0;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 4px 12px;
-    border-radius: 12px;
-}
-
-.area-hint {
+.area-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     text-align: center;
-    color: #718096;
-    font-size: 0.8rem;
-    margin-top: 10px;
-    font-style: italic;
+    padding: 5px 15px;
+    background: rgba(0, 0, 0, 0.7);
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #e2e8f0;
+    z-index: 5;
 }
 
-/* Recepção */
+/* ==================== RECEÇÃO ==================== */
 #reception {
-    background: linear-gradient(135deg, #553c9a 0%, #6b46c1 100%);
-    border: 2px solid #805ad5;
+    width: 1180px;
+    height: 189px;
+    left: 10px;
+    top: 55px;
+    background: url('../assets/backgrounds/recepcao.png') no-repeat;
+    background-size: 1180px 189px;
 }
 
 #reception .slots-container {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    min-height: 90px;
-    align-items: flex-start;
-    align-content: flex-start;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
-/* Sala de Espera */
+/* Slots tracejados na receção */
+#reception .slot-placeholder {
+    position: absolute;
+    width: 90px;
+    height: 110px;
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    top: 47px;
+}
+
+#reception .slot-placeholder:nth-child(1) {
+    left: 70px;
+}
+
+#reception .slot-placeholder:nth-child(2) {
+    left: 195px;
+}
+
+#reception .slot-placeholder:nth-child(3) {
+    left: 320px;
+}
+
+#reception .slot-placeholder:nth-child(4) {
+    left: 445px;
+}
+
+/* Posições dos cards na receção (90x110) */
+#reception .employee {
+    position: absolute;
+    top: 47px;
+}
+
+#reception .employee:nth-of-type(1) {
+    left: 70px;
+}
+
+#reception .employee:nth-of-type(2) {
+    left: 195px;
+}
+
+#reception .employee:nth-of-type(3) {
+    left: 320px;
+}
+
+#reception .employee:nth-of-type(4) {
+    left: 445px;
+}
+
+/* ==================== SALA DE ESPERA ==================== */
 #waiting-room {
-    background: linear-gradient(135deg, #744210 0%, #975a16 100%);
-    border: 2px solid #d69e2e;
+    width: 1180px;
+    height: 189px;
+    left: 10px;
+    top: 250px;
+    background: url('../assets/backgrounds/sala_espera.png') no-repeat;
+    background-size: 1180px 189px;
 }
 
 #waiting-room .slots-container {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    min-height: 90px;
-    align-items: flex-start;
-    align-content: flex-start;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
-/* Espaços de Trabalho */
+#waiting-room .slots-container.highlight {
+    background: rgba(72, 187, 120, 0.2);
+}
+
+/* Slots tracejados na sala de espera */
+#waiting-room .slot-placeholder {
+    position: absolute;
+    width: 90px;
+    height: 110px;
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    top: 40px;
+}
+
+#waiting-room .slot-placeholder:nth-child(1) {
+    left: 615px;
+}
+
+#waiting-room .slot-placeholder:nth-child(2) {
+    left: 774px;
+}
+
+#waiting-room .slot-placeholder:nth-child(3) {
+    left: 889px;
+}
+
+/* Posições dos cards na sala de espera (90x110) */
+#waiting-room .employee {
+    position: absolute;
+    top: 40px;
+}
+
+#waiting-room .employee:nth-of-type(1) {
+    left: 615px;
+}
+
+#waiting-room .employee:nth-of-type(2) {
+    left: 774px;
+}
+
+#waiting-room .employee:nth-of-type(3) {
+    left: 889px;
+}
+
+/* ==================== ESPAÇOS DE TRABALHO ==================== */
 #workspaces {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 15px;
+    position: absolute;
+    top: 445px;
+    left: 10px;
+    width: 1180px;
+    height: 230px;
 }
 
 .workspace {
-    background: #4a5568;
-    border-radius: 12px;
-    padding: 15px;
-    transition: all 0.3s ease;
+    position: absolute;
+    height: 230px;
 }
 
-.workspace-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.workspace-icon {
-    font-size: 1.3rem;
-}
-
-.workspace-title {
+.workspace-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    font-size: 0.9rem;
     font-weight: bold;
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    color: #e2e8f0;
+    z-index: 5;
 }
 
 .workspace-slots {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 35px);
 }
 
-/* Open Space */
+/* ==================== OPEN SPACE: 435x230 em x=0 (relativo ao workspaces) ==================== */
 #open-space {
-    background: linear-gradient(135deg, #2b6cb0 0%, #3182ce 100%);
-    border: 2px solid #4299e1;
+    width: 435px;
+    left: 0;
+    top: 0;
+    background: url('../assets/backgrounds/open_space.png') no-repeat;
+    background-size: 435px 230px;
 }
 
-/* Phonebooth */
+/* Posições dos cards no open space */
+#open-space .work-slot[data-slot="open-a"] {
+    position: absolute;
+    left: 82px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#open-space .work-slot[data-slot="open-b"] {
+    position: absolute;
+    left: 282px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* ==================== PHONEBOOTH: 290x230 em x=446 (relativo ao workspaces) ==================== */
 #phonebooth {
-    background: linear-gradient(135deg, #c53030 0%, #e53e3e 100%);
-    border: 2px solid #fc8181;
+    width: 290px;
+    left: 446px;
+    top: 0;
+    background: url('../assets/backgrounds/phonebooth.png') no-repeat;
+    background-size: 290px 230px;
 }
 
-/* Huddle Room */
+/* Posição do card no phonebooth */
+#phonebooth .work-slot[data-slot="phone"] {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* ==================== HUDDLE ROOM: 435x230 em x=745 (relativo ao workspaces) ==================== */
 #huddle-room {
-    background: linear-gradient(135deg, #276749 0%, #38a169 100%);
-    border: 2px solid #68d391;
+    width: 435px;
+    left: 745px;
+    top: 0;
+    background: url('../assets/backgrounds/huddle_room.png') no-repeat;
+    background-size: 435px 230px;
 }
 
-/* Slots de Trabalho */
+/* Posição do card no huddle room */
+#huddle-room .work-slot[data-slot="huddle"] {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* ==================== SLOTS DE TRABALHO ==================== */
 .work-slot {
     width: 90px;
     height: 110px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 2px dashed rgba(255, 255, 255, 0.4);
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
     transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Timer abaixo do card */
+.work-slot .card-timer {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #ffd93d;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    white-space: nowrap;
+    z-index: 10;
 }
 
 .work-slot.highlight {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: #fff;
+    background: rgba(72, 187, 120, 0.3);
+    border-color: #48bb78;
     border-style: solid;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 20px rgba(72, 187, 120, 0.5);
     transform: scale(1.05);
 }
 
@@ -433,62 +617,36 @@ body {
     background: rgba(255, 0, 0, 0.3);
     border-color: #f56565;
     border-style: solid;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
 }
 
 .work-slot.occupied {
     border-style: solid;
     border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.05);
 }
 
-.slot-label {
-    position: absolute;
-    bottom: 8px;
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.7);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.slot-timer {
-    position: absolute;
-    bottom: -25px;
-    left: 5px;
-    right: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-}
-
-.slot-timer-bar {
-    width: 100%;
-    height: 6px;
-    background: #1a202c;
-    border-radius: 3px;
-    overflow: hidden;
-}
-
-.slot-timer-bar::after {
-    content: '';
-    display: block;
-    height: 100%;
-    width: var(--progress, 100%);
-    background: linear-gradient(90deg, #ffd93d, #48bb78);
-    transition: width 0.1s linear;
-    border-radius: 3px;
-}
-
-.slot-timer-text {
-    font-size: 0.7rem;
-    color: #ffd93d;
-    font-weight: bold;
-}
-
-/* ==================== FUNCIONÁRIOS ==================== */
+/* ==================== FUNCIONÁRIOS / CARDS ==================== */
 .employee {
-    width: 65px;
-    height: 80px;
-    border-radius: 10px;
+    width: 90px;
+    height: 110px;
+    border-radius: 8px;
     cursor: grab;
     position: relative;
     display: flex;
@@ -498,6 +656,17 @@ body {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     user-select: none;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    overflow: visible;
+    background: transparent;
+    border: none;
+}
+
+.employee-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    pointer-events: none;
 }
 
 .employee:hover {
@@ -518,58 +687,37 @@ body {
 }
 
 @keyframes working-pulse {
-    0%, 100% { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
-    50% { box-shadow: 0 4px 25px rgba(255, 217, 61, 0.4); }
+
+    0%,
+    100% {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 4px 25px rgba(255, 217, 61, 0.4);
+    }
 }
 
-.employee.blue {
-    background: linear-gradient(135deg, #2b6cb0 0%, #4299e1 100%);
-    border: 3px solid #63b3ed;
-}
-
-.employee.red {
-    background: linear-gradient(135deg, #c53030 0%, #fc8181 100%);
-    border: 3px solid #feb2b2;
-}
-
+/* Remover estilos de cores antigas - usando imagens agora */
+.employee.blue,
+.employee.red,
 .employee.green {
-    background: linear-gradient(135deg, #276749 0%, #48bb78 100%);
-    border: 3px solid #9ae6b4;
+    background: transparent;
+    border: none;
 }
 
-.employee-icon {
-    font-size: 1.6rem;
-    margin-bottom: 3px;
-}
-
-.employee-name {
-    font-size: 0.6rem;
-    color: white;
-    text-align: center;
-    font-weight: bold;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    max-width: 55px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.employee-task {
-    font-size: 0.55rem;
-    color: rgba(255, 255, 255, 0.8);
-    text-align: center;
-}
-
-/* Barra de Paciência */
+/* ==================== BARRA DE PACIÊNCIA ==================== */
 .patience-container {
     position: absolute;
-    top: -10px;
-    left: 5px;
-    right: 5px;
-    height: 6px;
-    background: #1a202c;
-    border-radius: 3px;
+    top: -12px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
     overflow: hidden;
+    z-index: 10;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .patience-bar {
@@ -585,8 +733,20 @@ body {
 }
 
 @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Esconder barra de paciência quando trabalhando */
+.employee.working .patience-container {
+    display: none;
 }
 
 /* ==================== OVERLAY DE MENSAGEM ==================== */
@@ -645,6 +805,21 @@ body {
     margin-bottom: 25px;
 }
 
+#message-access-code {
+    margin: 15px 0;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #ffd700;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #ffd700;
+}
+
+#message-access-code.hidden {
+    display: none;
+}
+
 #message-stats p {
     margin-bottom: 8px;
     font-size: 0.95rem;
@@ -674,18 +849,18 @@ body {
 /* ==================== TOAST ==================== */
 #toast {
     position: fixed;
-    top: 20px;
+    top: 60px;
     left: 50%;
     transform: translateX(-50%) translateY(-100px);
     background: #e53e3e;
     color: white;
-    padding: 12px 25px;
-    border-radius: 10px;
+    padding: 10px 20px;
+    border-radius: 8px;
     font-weight: bold;
     z-index: 3000;
     transition: transform 0.3s ease;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
 }
 
 #toast.show {
@@ -715,45 +890,44 @@ body {
     gap: 8px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
     pointer-events: none;
-    animation: shake 0.5s ease;
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-5px); }
-    40%, 80% { transform: translateX(5px); }
 }
 
 /* ==================== RESPONSIVIDADE ==================== */
-@media (max-width: 768px) {
+@media (max-width: 1300px) {
     #game-container {
-        padding: 15px;
+        width: 100vw;
+        height: 56.25vw;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 0;
+    }
+
+    #game-container {
+        width: 100vw;
+        height: 56.25vw;
+        border-radius: 0;
     }
 
     #header {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    #workspaces {
-        grid-template-columns: 1fr;
-    }
-
-    .workspace-slots {
-        justify-content: center;
+        padding: 5px 10px;
     }
 
     #timer {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
 
     .employee {
-        width: 55px;
-        height: 70px;
+        width: 60px;
+        height: 73px;
     }
 
     .work-slot {
-        width: 75px;
-        height: 95px;
+        width: 60px;
+        height: 73px;
     }
 }

@@ -28,24 +28,26 @@ class Game {
     cacheElements() {
         this.elements = {
             startScreen: document.getElementById('start-screen'),
+            missionScreen: document.getElementById('mission-screen'),
             gameArea: document.getElementById('game-area'),
             timer: document.getElementById('timer'),
             phaseText: document.getElementById('phase-text'),
             completed: document.getElementById('completed'),
             progressFill: document.getElementById('progress-fill'),
             receptionSlots: document.getElementById('reception-slots'),
-            receptionCount: document.getElementById('reception-count'),
             waitingSlots: document.getElementById('waiting-slots'),
-            waitingCount: document.getElementById('waiting-count'),
             workSlots: document.querySelectorAll('.work-slot'),
             messageOverlay: document.getElementById('message-overlay'),
             messageBox: document.getElementById('message-box'),
             messageIcon: document.getElementById('message-icon'),
             messageTitle: document.getElementById('message-title'),
             messageText: document.getElementById('message-text'),
+            messageAccessCode: document.getElementById('message-access-code'),
             messageStats: document.getElementById('message-stats'),
+            restartBtnOverlay: document.getElementById('restart-btn-overlay'),
             toast: document.getElementById('toast'),
             startBtn: document.getElementById('start-btn'),
+            continueBtn: document.getElementById('continue-btn'),
             restartBtn: document.getElementById('restart-btn')
         };
     }
@@ -54,14 +56,40 @@ class Game {
      * Configura event listeners
      */
     setupEventListeners() {
-        this.elements.startBtn.addEventListener('click', () => this.start());
-        this.elements.restartBtn.addEventListener('click', () => this.start());
+        this.elements.startBtn.addEventListener('click', () => this.showMissionScreen());
+        this.elements.continueBtn.addEventListener('click', () => this.start());
+        this.elements.restartBtnOverlay.addEventListener('click', () => this.restart());
+        this.elements.restartBtn.addEventListener('click', () => {
+            window.location.href = 'https://view.genially.com/695d761c0205f1624b0b8ed3?idSlide=3610cdbb-e7b1-4e45-9401-1ee62b44ecc6';
+        });
+    }
+
+    /**
+     * Mostra o ecrã de missão (sobre o fundo do jogo)
+     */
+    showMissionScreen() {
+        this.elements.startScreen.classList.add('hidden');
+        this.elements.gameArea.classList.remove('hidden');
+        this.elements.missionScreen.classList.remove('hidden');
+    }
+
+    /**
+     * Reinicia o jogo (volta para o ecrã inicial)
+     */
+    restart() {
+        this.elements.messageOverlay.classList.add('hidden');
+        this.elements.gameArea.classList.add('hidden');
+        this.elements.missionScreen.classList.add('hidden');
+        this.elements.startScreen.classList.remove('hidden');
     }
 
     /**
      * Inicia o jogo
      */
     start() {
+        // Esconde o ecrã de missão
+        this.elements.missionScreen.classList.add('hidden');
+        
         // Reset do estado
         this.isRunning = true;
         this.timeRemaining = CONFIG.GAME_DURATION;
@@ -77,7 +105,6 @@ class Game {
         this.clearAllSlots();
         
         // Atualizar UI
-        this.elements.startScreen.classList.add('hidden');
         this.elements.gameArea.classList.remove('hidden');
         this.elements.messageOverlay.classList.add('hidden');
         this.updateTimerUI();
@@ -173,15 +200,23 @@ class Game {
     }
 
     /**
-     * Spawna um novo colaborador
+     * Cria um novo colaborador
      */
     spawnEmployee() {
         if (this.spawnedCount >= CONFIG.TOTAL_EMPLOYEES) return;
 
-        // Determinar tipo baseado em balanceamento
+        // Verificar se a receção está cheia (limite de 4 cards)
+        const receptionCount = this.elements.receptionSlots.querySelectorAll('.employee').length;
+        if (receptionCount >= 4) return;
+
+        // Determinar tipo baseado nos colaboradores disponíveis
         const type = this.getBalancedType();
         
         const employee = this.employeeFactory.create(type);
+        
+        // Se não há mais colaboradores disponíveis, retorna
+        if (!employee) return;
+        
         const element = employee.createElement();
         
         this.elements.receptionSlots.appendChild(element);
@@ -202,24 +237,8 @@ class Game {
      * Obtém um tipo balanceado para spawn
      */
     getBalancedType() {
-        // Contar quantos de cada tipo já foram spawnados
-        const counts = { blue: 0, red: 0, green: 0 };
-        
-        this.employees.forEach(emp => {
-            counts[emp.type]++;
-        });
-        
-        // Cada tipo deve ter ~5 colaboradores
-        const target = Math.ceil(CONFIG.TOTAL_EMPLOYEES / 3);
-        
-        // Filtrar tipos que ainda não atingiram a quota
-        const availableTypes = Object.keys(counts).filter(type => counts[type] < target);
-        
-        if (availableTypes.length === 0) {
-            return this.employeeFactory.getRandomType();
-        }
-        
-        return availableTypes[Math.floor(Math.random() * availableTypes.length)];
+        // Retorna tipo aleatório baseado nos colaboradores ainda disponíveis
+        return this.employeeFactory.getRandomType();
     }
 
     /**
@@ -314,35 +333,33 @@ class Game {
         
         if (victory) {
             this.elements.messageBox.className = 'victory';
-            this.elements.messageIcon.textContent = '🎉';
-            this.elements.messageTitle.textContent = 'Fluxo Otimizado!';
+            this.elements.messageIcon.textContent = '';
+            this.elements.messageTitle.textContent = 'FLUXO OTIMIZADO';
             this.elements.messageText.textContent = 
-                'Parabéns! Todos os colaboradores encontraram seu espaço. Fluxo de Navegação Definido!';
+                'Parabéns! Todos os colaboradores encontraram o seu espaço. Fluxo de navegação definido!';
+            
+            // Mostrar código de acesso apenas na vitória
+            if (this.elements.messageAccessCode) {
+                this.elements.messageAccessCode.classList.remove('hidden');
+            }
+
+            // Ocultar estatísticas
+            this.elements.messageStats.classList.add('hidden');
         } else {
             this.elements.messageBox.className = 'defeat';
-            this.elements.messageIcon.textContent = '😤';
+            this.elements.messageIcon.textContent = '';
             
-            if (failedEmployee) {
-                this.elements.messageTitle.textContent = 'Colaborador Desistiu!';
-                this.elements.messageText.textContent = 
-                    `${failedEmployee.name} perdeu a paciência e foi embora. O fluxo do escritório foi comprometido.`;
-            } else {
-                this.elements.messageTitle.textContent = 'Tempo Esgotado!';
-                this.elements.messageText.textContent = 
-                    'O expediente acabou antes de atender todos os colaboradores.';
+            // Esconder código de acesso na derrota
+            if (this.elements.messageAccessCode) {
+                this.elements.messageAccessCode.classList.add('hidden');
             }
+            
+            this.elements.messageTitle.textContent = 'GAME OVER';
+            this.elements.messageText.textContent = 'O Colaborador esperou tempo demais';
+            
+            // Ocultar estatísticas na derrota
+            this.elements.messageStats.classList.add('hidden');
         }
-        
-        // Estatísticas
-        const timeUsed = CONFIG.GAME_DURATION - this.timeRemaining;
-        const minutes = Math.floor(timeUsed / 60);
-        const seconds = timeUsed % 60;
-        
-        this.elements.messageStats.innerHTML = `
-            <p>📊 <strong>Colaboradores atendidos:</strong> ${this.completedCount}/${CONFIG.TOTAL_EMPLOYEES}</p>
-            <p>⏱️ <strong>Tempo utilizado:</strong> ${minutes}m ${seconds}s</p>
-            <p>📍 <strong>Fase alcançada:</strong> ${this.currentPhase} - ${CONFIG.PHASES[this.currentPhase].name}</p>
-        `;
     }
 
     /**
@@ -356,22 +373,14 @@ class Game {
      * Atualiza contagens
      */
     updateCounts() {
-        const inReception = this.employees.filter(e => e.location === 'reception').length;
-        const inWaiting = this.employees.filter(e => e.location === 'waiting').length;
-        
-        this.elements.receptionCount.textContent = inReception;
-        this.elements.waitingCount.textContent = inWaiting;
+        // Contagens removidas da UI - função mantida para compatibilidade
     }
 
     /**
      * Atualiza contagem da sala de espera
      */
     updateWaitingCount() {
-        const inWaiting = this.employees.filter(e => e.location === 'waiting').length;
-        this.elements.waitingCount.textContent = inWaiting;
-        
-        const inReception = this.employees.filter(e => e.location === 'reception').length;
-        this.elements.receptionCount.textContent = inReception;
+        // Contagens removidas da UI - função mantida para compatibilidade
     }
 
     /**
